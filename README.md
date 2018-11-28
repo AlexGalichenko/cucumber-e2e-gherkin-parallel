@@ -3,5 +3,10 @@
 ```javascript
 const compile = require("gherkin-parallel");
 
-compile(["./*.feature"], "./temp_folder", "@yourTag")
+compile({
+    specs: ["./test/scenarioOutline.feature"],
+    outDir: "./temp_folder",
+    tagExpression: "@scenarioOutlineTag1",
+    lang: "en"
+});
 ```
