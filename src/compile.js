@@ -8,23 +8,33 @@ const _ = require("lodash");
 
 /**
  * Compile and create splitted files
- * @param {Array<string>} specs - glob expression for specs
- * @param {string} tagExpression - tag expression to parse
- * @param {string} tempFolder - path to temp folder
+ * @param {Array<string>} options.specs - glob expression for specs
+ * @param {string} options.outDir - path to temp folder
+ * @param {string} [options.tagExpression] - tag expression to parse
+ * @param {string} [options.lang] - language of specs
  *
- * @return {Promise.<void>}
+ * @return {Promise<void>}
  */
-async function compile(specs, tempFolder, tagExpression = "") {
-    const filePaths = await _getFilesPathsFromGlob(specs);
+async function compile(options) {
+    if (!options.specs) {
+        throw new Error("Features paths are not defined");
+    }
+    if (!options.outDir) {
+        throw new Error("Output dir path is not defined");
+    }
+    options.tagExpression = options.tagExpression || "";
+    options.lang = options.lang || "en";
+
+    const filePaths = await _getFilesPathsFromGlob(options.specs);
     const featureTexts = _readFiles(filePaths);
-    const asts = _parseGherkinFiles(featureTexts);
+    const asts = _parseGherkinFiles(featureTexts, options.lang);
     asts.forEach(ast => {
         const featureTemplate = _getFeatureTemplate(ast);
         const features = _splitFeature(ast.feature.children, featureTemplate);
-        const filteredFeatures = _filterFeaturesByTag(features, tagExpression);
-        filteredFeatures.forEach((splitFeature, index) => {
+        const filteredFeatures = _filterFeaturesByTag(features, options.tagExpression);
+        filteredFeatures.forEach(splitFeature => {
             const escapedFileName = splitFeature.feature.name.replace(/[/\s]/g,"_");
-            fs.writeFileSync(`${tempFolder}/${escapedFileName}.${new Date().getTime()}.feature`, _writeFeature(splitFeature.feature), "utf8");
+            fs.writeFileSync(path.resolve(`${options.outDir}/${escapedFileName}.${new Date().getTime()}.feature`), _writeFeature(splitFeature.feature), "utf8");
         })
     });
 }
@@ -53,12 +63,13 @@ function _readFiles(filePaths) {
 /**
  * Parse gherkin files to ASTs
  * @private
- * @param features
+ * @param features - features to parse
+ * @param lang - language to parse
  * @return {Array}
  */
-function _parseGherkinFiles(features) {
-    const parser = new Gherkin.Parser(new Gherkin.AstBuilder());
-    const matcher = new Gherkin.TokenMatcher();
+function _parseGherkinFiles(features, lang) {
+    const parser = new Gherkin.Parser();
+    const matcher = new Gherkin.TokenMatcher(lang);
 
     return features.map(feature => {
         const scanner = new Gherkin.TokenScanner(feature);
