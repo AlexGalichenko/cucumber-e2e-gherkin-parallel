@@ -3,7 +3,7 @@
 ```javascript
 const compile = require("gherkin-parallel");
 
-compile({
+await compile({
     specs: ["./test/scenarioOutline.feature"],
     outDir: "./temp_folder",
     tagExpression: "@scenarioOutlineTag1",
