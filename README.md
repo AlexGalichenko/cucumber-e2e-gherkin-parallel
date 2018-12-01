@@ -10,7 +10,7 @@ The module is intended to separate feature files for their further parallelizati
 
 return Promise\<void\>
 
-Splitted features will be placed in temp folder with \<featureName>.\<timestamp>.feature (e.g Login.1543659379787.feature)        
+Splitted features will be placed in temp folder with \<featureName>.\<timestamp>.feature name (e.g Login.1543659379787.feature)        
 ```javascript
 const compile = require("gherkin-parallel");
 
