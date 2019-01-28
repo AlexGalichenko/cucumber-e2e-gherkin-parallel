@@ -1,13 +1,13 @@
 {
   "name": "@cucumber-e2e/gherkin-parallel",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Feature file splitter for cucumber parallelization",
   "main": "index.js",
   "scripts": {
     "docs": "jsdoc ./src/ -r -t ./node_modules/minami",
     "test": "jest",
     "build": "babel src -d lib",
-    "prepublish": "npm build"
+    "prepublish": "npm run build"
   },
   "keywords": [
     "cucumber",
