@@ -1,6 +1,6 @@
 {
   "name": "@cucumber-e2e/gherkin-parallel",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Feature file splitter for cucumber parallelization",
   "main": "index.js",
   "scripts": {
@@ -14,6 +14,14 @@
     "gherkin",
     "parallel"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AlexGalichenko/cucumber-e2e-gherkin-parallel.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AlexGalichenko/cucumber-e2e-gherkin-parallel/issues",
+    "email": "alexandr.galichenko@gmail.com"
+  },
   "author": "Alexander Galichenko",
   "license": "MIT",
   "babel": {
