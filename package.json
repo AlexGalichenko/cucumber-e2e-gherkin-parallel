@@ -24,6 +24,9 @@
   },
   "author": "Alexander Galichenko",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "babel": {
     "presets": [
       [
@@ -35,6 +38,9 @@
         }
       ]
     ]
+  },
+  "engines" : {
+    "node" : ">=6.0.0"
   },
   "jest": {
     "transformIgnorePatterns": ["<rootDir>\/.+\/"]
