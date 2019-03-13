@@ -9,5 +9,5 @@ dev.debug.log
 creds
 temp/
 out/
-test/temp/
+test/
 src/
