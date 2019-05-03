@@ -32,9 +32,9 @@ async function compile(options) {
         const featureTemplate = _getFeatureTemplate(ast);
         const features = _splitFeature(ast.feature.children, featureTemplate);
         const filteredFeatures = _filterFeaturesByTag(features, options.tagExpression);
-        filteredFeatures.forEach(splitFeature => {
+        filteredFeatures.forEach((splitFeature, index) => {
             const escapedFileName = splitFeature.feature.name.replace(/[/\s]/g,"_");
-            fs.writeFileSync(path.resolve(`${options.outDir}/${escapedFileName}.${new Date().getTime()}.feature`), _writeFeature(splitFeature.feature), "utf8");
+            fs.writeFileSync(path.resolve(`${options.outDir}/${escapedFileName}.${new Date().getTime()}${index}.feature`), _writeFeature(splitFeature.feature), "utf8");
         })
     });
 }

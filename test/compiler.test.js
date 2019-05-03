@@ -1,7 +1,6 @@
 const fs = require("fs-extra");
-const util = require("util");
 const path = require("path");
-const compile = require('../src/compile');
+const compile = require('../lib/compile');
 
 const TEMP_FOLDER = path.resolve("./test/temp/");
 
