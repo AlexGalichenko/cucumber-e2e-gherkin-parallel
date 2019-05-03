@@ -149,6 +149,17 @@ function _writeFeature(feature) {
 
         scenario.steps.forEach(step => {
             featureString += `${step.keyword}${step.text}${LINE_DELIMITER}`;
+            if (step.argument) {
+                if (step.argument.type === "DataTable") {
+                    step.argument.rows.forEach(row => {
+                        console.log(row);
+                        featureString += `|${row.cells.map(cell => cell.value).join("|")}|${LINE_DELIMITER}`
+                    })
+                }
+                if (step.argument.type === "DocString") {
+                    featureString += `"""\n${step.argument.content}\n"""${LINE_DELIMITER}`;
+                }
+            }
         });
 
         if (scenario.examples) {
