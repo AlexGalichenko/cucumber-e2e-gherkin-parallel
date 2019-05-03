@@ -152,7 +152,6 @@ function _writeFeature(feature) {
             if (step.argument) {
                 if (step.argument.type === "DataTable") {
                     step.argument.rows.forEach(row => {
-                        console.log(row);
                         featureString += `|${row.cells.map(cell => cell.value).join("|")}|${LINE_DELIMITER}`
                     })
                 }
