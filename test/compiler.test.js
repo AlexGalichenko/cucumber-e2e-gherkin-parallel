@@ -59,6 +59,32 @@ test("compile scenario outline with tag expression", async () => {
     expect(fileContent[1]).toBe("@featureTag\nFeature: ScenarioOutline\nBackground: \nGiven Prerequisites\n@scenarioOutlineTag1\n@featureTag\nScenario Outline: Outline Scenario 1\nThen Test \"<example>\"\nExamples:\n|example|\n|example2|\n");
 });
 
+test("compile scenario with data table", async () => {
+    await compile({
+        specs: ["./test/scenarioDataTables.feature"],
+        outDir: TEMP_FOLDER,
+        tagExpression: "@scenarioDataTableTag1 or @scenarioDataTableTag2"
+    });
+
+    const fileContent = await Promise.all((await fs.readdir(TEMP_FOLDER)).map(file => fs.readFile(path.resolve(TEMP_FOLDER + "/" + file), "utf-8")));
+    expect(fileContent.length).toBe(2);
+    expect(fileContent[0]).toBe("@featureTag\nFeature: Scenario Datatables\nBackground: \nGiven Prerequisites\n@scenarioDataTableTag1\n@featureTag\nScenario: Scenario data table 1\nThen TestDataTable\n|data1|data2|\n");
+    expect(fileContent[1]).toBe("@featureTag\nFeature: Scenario Datatables\nBackground: \nGiven Prerequisites\n@scenarioDataTableTag2\n@featureTag\nScenario: Scenario data table 2\nThen TestDataTable\n|data1|data2|\n");
+});
+
+test("compile scenario with multiline text", async () => {
+    await compile({
+        specs: ["./test/scenarioMultilineText.feature"],
+        outDir: TEMP_FOLDER,
+        tagExpression: "@scenarioMultilineTag1 or @scenarioMultilineTag2"
+    });
+
+    const fileContent = await Promise.all((await fs.readdir(TEMP_FOLDER)).map(file => fs.readFile(path.resolve(TEMP_FOLDER + "/" + file), "utf-8")));
+    expect(fileContent.length).toBe(2);
+    expect(fileContent[0]).toBe("@featureTag\nFeature: Scenario Multiline\nBackground: \nGiven Prerequisites\n@scenarioMultilineTag1\n@featureTag\nScenario: Scenario multiline 1\nThen TestMultiline\n\"\"\"\nMultiline\nText\n\"\"\"\n");
+    expect(fileContent[1]).toBe("@featureTag\nFeature: Scenario Multiline\nBackground: \nGiven Prerequisites\n@scenarioMultilineTag2\n@featureTag\nScenario: Scenario multiline 2\nThen TestMultiline\n\"\"\"\nMultiline\nText\n\"\"\"\n");
+});
+
 test("compile scenario on other supported language", async () => {
     await compile({
         specs: ["./test/otherLangScenario.feature"],
