@@ -96,3 +96,16 @@ test("compile scenario on other supported language", async () => {
     expect(fileContent.length).toBe(1);
     expect(fileContent[0]).toBe("@featureTag\nFeature: Функція Користувача\nПередумова: \nНехай Prerequisites\n@scenarioTag\n@featureTag\nСценарій: Simple scenario\nТоді Test\n");
 });
+
+test("compile scenario outline with splitScenarioOutlines = false", async () => {
+    await compile({
+        specs: ["./test/scenarioOutline.feature"],
+        outDir: TEMP_FOLDER,
+        splitScenarioOutlines: false
+    });
+
+    const fileContent = await Promise.all((await fs.readdir(TEMP_FOLDER)).map(file => fs.readFile(path.resolve(TEMP_FOLDER + "/" + file), "utf-8")));
+    expect(fileContent.length).toBe(2);
+    expect(fileContent[0]).toBe("@featureTag\nFeature: ScenarioOutline\nBackground: \nGiven Prerequisites\n@scenarioOutlineTag1\n@featureTag\nScenario Outline: Outline Scenario 1\nThen Test \"<example>\"\nExamples:\n|example|\n|example1|\n|example2|\n");
+    expect(fileContent[1]).toBe("@featureTag\nFeature: ScenarioOutline\nBackground: \nGiven Prerequisites\n@scenarioOutlineTag2\n@featureTag\nScenario Outline: Outline Scenario 2\nThen Test \"<example>\"\nExamples:\n|example|\n|example1|\n|example2|\n");
+});
