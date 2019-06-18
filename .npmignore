@@ -7,6 +7,6 @@ npm-debug.log
 dev.debug.log
 .npmrc
 creds
-temp/
 out/
-test/temp/
+test/
+src/

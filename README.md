@@ -7,6 +7,7 @@ The module is intended to separate feature files for their further parallelizati
 |outDir|string|M||path to temp folder|
 |tagExpression|string|O||tag expression to filter splitted features|
 |lang|string|O|en|language of source features|
+|splitScenarioOutlines|boolean|O|true|split scenario outlines|
 
 return Promise\<void\>
 
@@ -18,6 +19,7 @@ await compile({
     specs: ["./test/scenarioOutline.feature"],
     outDir: "./temp_folder",
     tagExpression: "@scenarioOutlineTag1",
-    lang: "en"
+    lang: "en",
+    splitScenarioOutlines: true
 });
 ```

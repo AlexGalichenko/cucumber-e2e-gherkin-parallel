@@ -12,7 +12,7 @@ const _ = require("lodash");
  * @param {string} options.outDir - path to temp folder
  * @param {string} [options.tagExpression] - tag expression to parse
  * @param {string} [options.lang] - language of specs
- *
+ * @param {boolean} [options.splitScenarioOutlines] - flag to control need to split by examples
  * @return {Promise<void>}
  */
 async function compile(options) {
@@ -24,13 +24,16 @@ async function compile(options) {
     }
     options.tagExpression = options.tagExpression || "";
     options.lang = options.lang || "en";
+    if (options.splitScenarioOutlines !== false) {
+        options.splitScenarioOutlines = true
+    }
 
     const filePaths = await _getFilesPathsFromGlob(options.specs);
     const featureTexts = _readFiles(filePaths);
     const asts = _parseGherkinFiles(featureTexts, options.lang);
     asts.forEach(ast => {
         const featureTemplate = _getFeatureTemplate(ast);
-        const features = _splitFeature(ast.feature.children, featureTemplate);
+        const features = _splitFeature(ast.feature.children, featureTemplate, options.splitScenarioOutlines);
         const filteredFeatures = _filterFeaturesByTag(features, options.tagExpression);
         filteredFeatures.forEach((splitFeature, index) => {
             const escapedFileName = splitFeature.feature.name.replace(/[/\s]/g,"_");
@@ -93,14 +96,15 @@ function _getFeatureTemplate(feature) {
  * Split feature
  * @param {Array} scenarios - list of scenarios
  * @param {Object} featureTemplate - template of feature
+ * @param {boolean} [splitScenarioOutlines] - flag to control need to split by examples
  * @return {Array} - list of features
  * @private
  */
-function _splitFeature(scenarios, featureTemplate) {
+function _splitFeature(scenarios, featureTemplate, splitScenarioOutlines) {
     const scenarioOutline = scenarios
         .filter(scenario => scenario.type !== "Background")
         .map(scenario => {
-            if (scenario.type === "ScenarioOutline") {
+            if (scenario.type === "ScenarioOutline" && splitScenarioOutlines) {
                 const scenarioTemplate = _.cloneDeep(scenario);
                 return scenario.examples[0].tableBody.map(row => {
                     const modifiedScenario = _.cloneDeep(scenarioTemplate);

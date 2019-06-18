@@ -1,6 +1,6 @@
 {
   "name": "@cucumber-e2e/gherkin-parallel",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Feature file splitter for cucumber parallelization",
   "main": "index.js",
   "scripts": {
