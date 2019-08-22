@@ -13,7 +13,7 @@ return Promise\<void\>
 
 Splitted features will be placed in temp folder with \<featureName>.\<timestamp>.feature name (e.g Login.1543659379787.feature)        
 ```javascript
-const compile = require("gherkin-parallel");
+const compile = require("@cucumber-e2e/gherkin-parallel");
 
 await compile({
     specs: ["./test/scenarioOutline.feature"],

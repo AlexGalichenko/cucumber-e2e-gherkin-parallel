@@ -36,7 +36,7 @@ async function compile(options) {
         const features = _splitFeature(ast.feature.children, featureTemplate, options.splitScenarioOutlines);
         const filteredFeatures = _filterFeaturesByTag(features, options.tagExpression);
         filteredFeatures.forEach((splitFeature, index) => {
-            const escapedFileName = splitFeature.feature.name.replace(/[/\s]/g,"_");
+            const escapedFileName = splitFeature.feature.name.replace(/[^a-zA-Z0-9]/g,"_");
             fs.writeFileSync(path.resolve(`${options.outDir}/${escapedFileName}.${new Date().getTime()}${index}.feature`), _writeFeature(splitFeature.feature), "utf8");
         })
     });
