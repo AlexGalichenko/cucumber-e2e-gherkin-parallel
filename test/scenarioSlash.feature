@@ -17,5 +17,6 @@ Feature: Scenario Slash
     Then Test "<example>"
 
     Examples:
-      | example       |
-      | example \nest |
+      | example              |
+      | example \nest        |
+      | example with \| pipe |

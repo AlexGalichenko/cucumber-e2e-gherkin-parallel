@@ -117,8 +117,19 @@ test("compile scenario with slashes", async () => {
     });
 
     const fileContent = await Promise.all((await fs.readdir(TEMP_FOLDER)).map(file => fs.readFile(path.resolve(TEMP_FOLDER + "/" + file), "utf-8")));
-    expect(fileContent.length).toBe(3);
+    expect(fileContent.length).toBe(4);
     expect(fileContent[0]).toBe("@featureTag\nFeature: Scenario Slash\nBackground: \nGiven Prerequisites\n@scenarioTag1\n@featureTag\nScenario: Simple \\nest scenario 1\nThen Test\n");
     expect(fileContent[1]).toBe("@featureTag\nFeature: Scenario Slash\nBackground: \nGiven Prerequisites\n@scenarioTag2\n@featureTag\nScenario: Simple scenario 2\nThen Tes\\n\n");
     expect(fileContent[2]).toBe("@featureTag\nFeature: Scenario Slash\nBackground: \nGiven Prerequisites\n@scenarioOutlineTag1\n@featureTag\nScenario Outline: Outline Scenario 3\nThen Test \"<example>\"\nExamples:\n|example|\n|example \\nest|\n");
+    expect(fileContent[3]).toBe("@featureTag\nFeature: Scenario Slash\nBackground: \nGiven Prerequisites\n@scenarioOutlineTag1\n@featureTag\nScenario Outline: Outline Scenario 3\nThen Test \"<example>\"\nExamples:\n|example|\n|example with \\| pipe|\n");
+});
+
+test("escape special chars in names", async () => {
+    await compile({
+        specs: ["./test/scenarioSpecialChars.feature"],
+        outDir: TEMP_FOLDER
+    });
+
+    const fileNames = await fs.readdir(TEMP_FOLDER);
+    expect(fileNames[0]).toMatch(/^Scenario_with_special_______________________chars_123\.\d+\.feature$/)
 });
