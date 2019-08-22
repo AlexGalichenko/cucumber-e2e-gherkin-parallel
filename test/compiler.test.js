@@ -109,3 +109,13 @@ test("compile scenario outline with splitScenarioOutlines = false", async () => 
     expect(fileContent[0]).toBe("@featureTag\nFeature: ScenarioOutline\nBackground: \nGiven Prerequisites\n@scenarioOutlineTag1\n@featureTag\nScenario Outline: Outline Scenario 1\nThen Test \"<example>\"\nExamples:\n|example|\n|example1|\n|example2|\n");
     expect(fileContent[1]).toBe("@featureTag\nFeature: ScenarioOutline\nBackground: \nGiven Prerequisites\n@scenarioOutlineTag2\n@featureTag\nScenario Outline: Outline Scenario 2\nThen Test \"<example>\"\nExamples:\n|example|\n|example1|\n|example2|\n");
 });
+
+test("escape special chars in names", async () => {
+    await compile({
+        specs: ["./test/scenarioSpecialChars.feature"],
+        outDir: TEMP_FOLDER
+    });
+
+    const fileNames = await fs.readdir(TEMP_FOLDER);
+    expect(fileNames[0]).toMatch(/^Scenario_with_special_______________________chars_123\.\d+\.feature$/)
+});
