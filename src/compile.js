@@ -203,7 +203,7 @@ function _filterFeaturesByTag(features, tagExpression) {
  */
 function unescape(str) {
     return JSON.stringify(str)
-        .replace(/"/g, "")
+        .replace(/(^")|("$)/g, "")
         .replace(/\|/, "\\\|")
 }
 
