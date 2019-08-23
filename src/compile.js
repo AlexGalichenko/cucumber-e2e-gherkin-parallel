@@ -156,7 +156,7 @@ function _writeFeature(feature) {
             if (step.argument) {
                 if (step.argument.type === "DataTable") {
                     step.argument.rows.forEach(row => {
-                        featureString += `|${row.cells.map(cell => cell.value).join("|")}|${LINE_DELIMITER}`
+                        featureString += `|${row.cells.map(cell => unescape(cell.value)).join("|")}|${LINE_DELIMITER}`
                     })
                 }
                 if (step.argument.type === "DocString") {
@@ -168,9 +168,9 @@ function _writeFeature(feature) {
         if (scenario.examples) {
             const example = scenario.examples[0];
             featureString += `Examples:${LINE_DELIMITER}`;
-            featureString += `|${example.tableHeader.cells.map(cell => `${cell.value}|`).join("")}${LINE_DELIMITER}`;
+            featureString += `|${example.tableHeader.cells.map(cell => `${unescape(cell.value)}|`).join("")}${LINE_DELIMITER}`;
             example.tableBody.forEach(tableRow => {
-                featureString += `|${tableRow.cells.map(cell => `${cell.value}|`).join("")}${LINE_DELIMITER}`;
+                featureString += `|${tableRow.cells.map(cell => `${unescape(cell.value)}|`).join("")}${LINE_DELIMITER}`;
             })
         }
     });
@@ -194,6 +194,17 @@ function _filterFeaturesByTag(features, tagExpression) {
             }
         })
     });
+}
+
+/**
+ * Unescape exeptional cases
+ * @param str - string to unescape
+ * @return {string} - unescaped string
+ */
+function unescape(str) {
+    return JSON.stringify(str)
+        .replace(/(^")|("$)/g, "")
+        .replace(/\|/, "\\\|")
 }
 
 module.exports = compile;
