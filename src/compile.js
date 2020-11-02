@@ -197,14 +197,14 @@ function _filterFeaturesByTag(features, tagExpression) {
 }
 
 /**
- * Unescape exeptional cases
+ * Unescape exceptional cases
  * @param str - string to unescape
  * @return {string} - unescaped string
  */
 function unescape(str) {
     return JSON.stringify(str)
         .replace(/(^")|("$)/g, "")
-        .replace(/\|/, "\\\|")
+        .replace(/\|/g, "\\\|")
 }
 
 module.exports = compile;
